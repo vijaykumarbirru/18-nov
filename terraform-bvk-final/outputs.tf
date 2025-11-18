@@ -103,7 +103,7 @@ output "eks_gateway_oidc_arn" {
 }
 
 output "eks_gateway_oidc_url" {
-  value = module.eks_gateway.oidc_provider_url
+  value = module.eks_backend.identity[0].oidc[0].issuer
 }
 
 output "eks_backend_oidc_arn" {
@@ -111,5 +111,5 @@ output "eks_backend_oidc_arn" {
 }
 
 output "eks_backend_oidc_url" {
-  value = module.eks_backend.oidc_provider_url
+  value = module.eks_backend.identity[0].oidc[0].issuer
 }
