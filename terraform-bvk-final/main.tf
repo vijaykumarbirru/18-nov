@@ -134,17 +134,15 @@ module "eks_gateway" {
 
   cluster_name       = "eks-gateway"
   cluster_version    = var.k8s_version
-  private_subnet_ids = module.vpc_gateway.private_subnet_ids
   vpc_id             = module.vpc_gateway.vpc_id
-  # instance_type      = var.gateway_instance_ty
-  # peers_cidrs        = [var.vpc_gateway_cidr] # Allow backend → gateway API
-  cluster_role_arn = "arn:aws:iam::721500739616:role/eks-gateway-eks-cluster-role"
-  node_role_arn    = "arn:aws:iam::721500739616:role/eks-gateway-eks-node-role"
+  private_subnet_ids =  module.vpc_gateway.private_subnet_ids
+  //public_subnet_ids  = module.network.public_subnet_ids
+  region             = var.region
 
   node_desired_size = 2
   node_min_size     = 1
   node_max_size     = 4
-  instance_types    = ["t3.medium"]
+  instance_types    = ["t3.small"]
   disk_size         = 30
 
   addon_versions = {
@@ -214,16 +212,25 @@ module "eks_backend" {
 
   cluster_name       = "eks-backend"
   cluster_version    = var.k8s_version
-  private_subnet_ids = module.vpc_backend.private_subnet_ids
   vpc_id             = module.vpc_backend.vpc_id
-  instance_type      = var.backend_instance_ty
-  peers_cidrs        = [var.vpc_backend_cidr]
+  private_subnet_ids = module.vpc_backend.private_subnet_ids
+  //public_subnet_ids  = module.network.public_subnet_ids
+  region             = var.region
 
-  cluster_role_arn = "arn:aws:iam::721500739616:role/eks-backend-eks-cluster-role"
-  node_role_arn    = "arn:aws:iam::721500739616:role/eks-backend-eks-node-role"
+  node_desired_size = 2
+  node_min_size     = 1
+  node_max_size     = 4
+  instance_types    = ["t3.small"]
+  disk_size         = 30
+
+  addon_versions = {
+    vpc_cni                = "latest"
+    kube_proxy             = "latest"
+    coredns                = "latest"
+    eks_pod_identity_agent = "latest"
+  }
 
   tags = {
-    Name    = "eks-backend"
     Project = var.project
     Env     = var.env
   }

@@ -3,6 +3,7 @@
 ##########################################
 project = "multi-vpc-eks"
 env     = "dev"
+region  = "us-west-2"
 
 ##########################################
 # VPC-GATEWAY CONFIG

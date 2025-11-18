@@ -9,6 +9,9 @@ variable "project" {
 variable "env" {
   type = string
 }
+variable "region" {
+  type = string
+}
 
 ############################
 # VPC-GATEWAY
