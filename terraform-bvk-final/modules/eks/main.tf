@@ -57,6 +57,29 @@ module "eks" {
   tags = var.tags
 }
 
+###########################################
+# IRSA - OPENID CONNECT PROVIDER
+###########################################
+
+# Get TLS certificate from the EKS OIDC issuer
+data "tls_certificate" "oidc" {
+  url = module.eks.identity[0].oidc[0].issuer
+}
+
+# Create OIDC Provider for IRSA
+resource "aws_iam_openid_connect_provider" "eks_oidc" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.oidc.certificates[0].sha1_fingerprint]
+  url             = module.eks.identity[0].oidc[0].issuer
+
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.cluster_name}-oidc-provider"
+    }
+  )
+}
+
 output "cluster_name"        { value = module.eks.cluster_name }
 output "cluster_endpoint"    { value = module.eks.cluster_endpoint }
 output "cluster_ca"          { value = module.eks.cluster_certificate_authority_data }

@@ -314,7 +314,7 @@ module "alb_irsa_gateway" {
       },
       Condition = {
         "StringEquals" = {
-          "${replace(module.eks_gateway.oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+          "${replace(module.eks_gateway.cluster_oidc_issuer_url, "https://", "")}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
         }
       }
     }]
@@ -351,7 +351,7 @@ module "alb_irsa_backend" {
       },
       Condition = {
         "StringEquals" = {
-          "${replace(module.eks_backend.oidc_provider_url, "https://", "")}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+          "${replace(module.eks_backend.cluster_oidc_issuer_url, "https://", "")}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
         }
       }
     }]

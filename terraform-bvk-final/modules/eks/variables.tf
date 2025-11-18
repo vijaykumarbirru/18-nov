@@ -63,3 +63,4 @@ variable "addon_versions" {
   })
   default = {}
 }
+variable "cluster_oidc_issuer_url" {}
