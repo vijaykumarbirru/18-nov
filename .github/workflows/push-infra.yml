@@ -48,6 +48,7 @@ jobs:
 
 
   terraform-plan:
+    needs: terraform-validate
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout
